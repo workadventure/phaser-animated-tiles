@@ -70,14 +70,14 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
         if (this.animatedTiles.length === 1) {
             this.active = true; // Start the animations by default
         }
-        /* Needed?
+
         this.animatedTiles[this.animatedTiles.length-1].animatedTiles.forEach(
             (animatedTile) => {
                 animatedTile.tiles.forEach((layer) => {
                     this.updateLayer(animatedTile,  layer);
                 });
             }
-        )*/
+        )
     }
 
     setRate(rate, gid = null, map = null) {
