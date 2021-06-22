@@ -4,22 +4,24 @@
  * @license      {@link https://github.com/nkholski/phaser3-animated-tiles/blob/master/LICENSE|MIT License}
  */
 
+var Events = require('./events');
+
 //
 // This plugin is based on Photonstorms Phaser 3 plugin template with added support for ES6.
-// 
+//
 
 class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
     /*
 
-    TODO: 
+    TODO:
     1. Fix property names which is a mess after adding support for multiple maps, tilesets and layers.
     2. Helper functions: Get mapIndex by passing a map (and maybe support it as argument to methods), Get layerIndex, get tile index from properties.
-    
+
     */
     constructor(scene, pluginManager) {
         super(scene, pluginManager);
 
-        // TileMap the plugin belong to. 
+        // TileMap the plugin belong to.
         // TODO: Array or object for multiple tilemaps support
         // TODO: reference to layers too, and which is activated or not
         this.map = null;
@@ -163,6 +165,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
         if (!this.active) {
             return;
         }
+        let animationTriggered = false;
         // Elapsed time is the delta multiplied by the global rate and the scene timeScale if folowTimeScale is true
         let globalElapsedTime = delta * this.rate * (this.followTimeScale ? this.scene.time.timeScale : 1);
         this.animatedTiles.forEach(
@@ -202,11 +205,16 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
                                 this.updateLayer(animatedTile, layer, oldTileId);
 
                             });
+                            animationTriggered = true;
                         }
                     }
                 ); // animData loop
             }
         ); // Map loop
+
+        if (animationTriggered) {
+            this.scene.events.emit(Events.TILE_ANIMATION_UPDATE);
+        }
     }
 
     updateLayer(animatedTile, layer, oldTileId = -1) {
@@ -293,7 +301,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
                                     if ((!layer.tilemapLayer) ||
                                         (!layer.tilemapLayer.type) ||
                                         (layer.tilemapLayer.type === "StaticTilemapLayer")) {
-                                        // We just push an empty array if the layer is static (impossible to animate). 
+                                        // We just push an empty array if the layer is static (impossible to animate).
                                         // If we just skip the layer, the layer order will be messed up
                                         // when updating animated tiles and things will look awful.
                                         animatedTileData.tiles.push([]);
@@ -307,7 +315,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
                                             // ...and loop through all tiles in that row
                                             tileRow.forEach(
                                                 (tile) => {
-                                                    // Tiled start index for tiles with 1 but animation with 0. Thus that wierd "-1"                                                    
+                                                    // Tiled start index for tiles with 1 but animation with 0. Thus that wierd "-1"
                                                     if ((tile.index - tileset.firstgid) === index) {
                                                         tiles.push(tile);
                                                     }
@@ -343,7 +351,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
     }
 
     updateAnimatedTiles() {
-        // future args: x=null, y=null, w=null, h=null, container=null 
+        // future args: x=null, y=null, w=null, h=null, container=null
         let x = null,
             y = null,
             w = null,
