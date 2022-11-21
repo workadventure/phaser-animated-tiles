@@ -372,10 +372,10 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
         // 1 & 2: Update the map(s)
         container.forEach(
             (mapAnimData) => {
-                let chkX = x !== null ? x : 0;
-                let chkY = y !== null ? y : 0;
-                let chkW = w !== null ? mapAnimData.map.width : 10;
-                let chkH = h !== null ? mapAnimData.map.height : 10;
+                let chkX = x ?? 0;
+                let chkY = y ?? 0;
+                let chkW = mapAnimData.map.width ?? 10;
+                let chkH = mapAnimData.map.height ?? 10;
 
                 mapAnimData.animatedTiles.forEach(
                     (tileAnimData) => {
