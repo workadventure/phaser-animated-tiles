@@ -387,7 +387,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
                                 }
                                 for (let x = chkX; x < (chkX + chkW); x++) {
                                     for (let y = chkY; y < (chkY + chkH); y++) {
-                                        let tile = mapAnimData.map.layers[layerIndex].data[x][y];
+                                        let tile = mapAnimData.map.layers[layerIndex].data[y][x];
                                         // should this tile be animated?
                                         if (tile.index == tileAnimData.index) {
                                             // is it already known? if not, add it to the list
