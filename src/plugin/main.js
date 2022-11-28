@@ -299,8 +299,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
                             map.layers.forEach(
                                 (layer) => {
                                     if ((!layer.tilemapLayer) ||
-                                        (!layer.tilemapLayer.type) ||
-                                        (layer.tilemapLayer.type === "StaticTilemapLayer")) {
+                                        (!layer.tilemapLayer.type)) {
                                         // We just push an empty array if the layer is static (impossible to animate).
                                         // If we just skip the layer, the layer order will be messed up
                                         // when updating animated tiles and things will look awful.
