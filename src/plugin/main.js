@@ -352,7 +352,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
 
     updateAnimatedTiles(x, y) {
         // future args: x=null, y=null, w=null, h=null, container=null
-            container = null;
+            let container = null;
         // 1. If no container, loop through all initilized maps
         if (container === null) {
             container = [];
