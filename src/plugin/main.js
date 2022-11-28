@@ -366,8 +366,8 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
         // container = [container];
 
         // 1 & 2: Update the map(s)
-        for (mapAnimData of container) {
-            for (tileAnimData of mapAnimData.animatedTiles) {
+        for (const mapAnimData of container) {
+            for (const tileAnimData of mapAnimData.animatedTiles) {
                 tileAnimData.tiles.forEach(
                     (tiles, layerIndex) => {
                         let layer = mapAnimData.map.layers[layerIndex];
