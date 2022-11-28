@@ -299,8 +299,7 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
                             map.layers.forEach(
                                 (layer) => {
                                     if ((!layer.tilemapLayer) ||
-                                        (!layer.tilemapLayer.type) ||
-                                        (layer.tilemapLayer.type === "StaticTilemapLayer")) {
+                                        (!layer.tilemapLayer.type)) {
                                         // We just push an empty array if the layer is static (impossible to animate).
                                         // If we just skip the layer, the layer order will be messed up
                                         // when updating animated tiles and things will look awful.
@@ -350,13 +349,9 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
         // No need to call updateAnimatedTiles as required for other modificatons of the tile-map
     }
 
-    updateAnimatedTiles() {
+    updateAnimatedTiles(x, y) {
         // future args: x=null, y=null, w=null, h=null, container=null
-        let x = null,
-            y = null,
-            w = null,
-            h = null,
-            container = null;
+            let container = null;
         // 1. If no container, loop through all initilized maps
         if (container === null) {
             container = [];
@@ -370,41 +365,24 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
         // container = [container];
 
         // 1 & 2: Update the map(s)
-        container.forEach(
-            (mapAnimData) => {
-                let chkX = x ?? 0;
-                let chkY = y ?? 0;
-                let chkW = mapAnimData.map.width ?? 10;
-                let chkH = mapAnimData.map.height ?? 10;
-
-                mapAnimData.animatedTiles.forEach(
-                    (tileAnimData) => {
-                        tileAnimData.tiles.forEach(
-                            (tiles, layerIndex) => {
-                                let layer = mapAnimData.map.layers[layerIndex];
-                                if (layer.type === "StaticTilemapLayer") {
-                                    return;
-                                }
-                                for (let x = chkX; x < (chkX + chkW); x++) {
-                                    for (let y = chkY; y < (chkY + chkH); y++) {
-                                        let tile = mapAnimData.map.layers[layerIndex].data[y][x];
-                                        // should this tile be animated?
-                                        if (tile.index == tileAnimData.index) {
-                                            // is it already known? if not, add it to the list
-                                            if (tiles.indexOf(tile) === -1) {
-                                                tiles.push(tile);
-                                            }
-                                            // update index to match current fram of this animation
-                                            tile.index = tileAnimData.frames[tileAnimData.currentFrame].tileid;
-                                        }
-                                    }
-                                }
+        for (const mapAnimData of container) {
+            for (const tileAnimData of mapAnimData.animatedTiles) {
+                tileAnimData.tiles.forEach(
+                    (tiles, layerIndex) => {
+                        let tile = mapAnimData.map.layers[layerIndex].data[y][x];
+                        // should this tile be animated?
+                        if (tile.index == tileAnimData.index) {
+                            // is it already known? if not, add it to the list
+                            if (tiles.indexOf(tile) === -1) {
+                                tiles.push(tile);
                             }
-                        )
+                            // update index to match current fram of this animation
+                            tile.index = tileAnimData.frames[tileAnimData.currentFrame].tileid;
+                        }
                     }
                 )
             }
-        );
+        }
         // 3. If container is a layer, just loop through it's tiles
     }
 };
