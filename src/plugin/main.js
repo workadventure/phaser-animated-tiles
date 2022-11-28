@@ -370,10 +370,6 @@ class AnimatedTiles extends Phaser.Plugins.ScenePlugin {
             for (const tileAnimData of mapAnimData.animatedTiles) {
                 tileAnimData.tiles.forEach(
                     (tiles, layerIndex) => {
-                        let layer = mapAnimData.map.layers[layerIndex];
-                        if (layer.type === "StaticTilemapLayer") {
-                            return;
-                        }
                         let tile = mapAnimData.map.layers[layerIndex].data[y][x];
                         // should this tile be animated?
                         if (tile.index == tileAnimData.index) {
